@@ -28,6 +28,11 @@ class Character:
 
     def strength_stamina_display(self):
         return f"{self.strength}/{self.stamina}"
+    
+    def iq_display(self):
+        if self.name.lower() == "professor":
+            return "Legendär"
+        return str(self.iq)
         
     def reset_after_game_over(self):
         self.life = self.max_life
