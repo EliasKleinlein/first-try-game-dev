@@ -1,5 +1,8 @@
 import time
 from character import Character
+from game_time import GameTime
+
+
 
 
 def typewriter_text(text, delay=0.03):
@@ -36,12 +39,13 @@ def show_intro():
     input("\nJunger Professor, bist du der Aufgabe gewachsen? Dann drücke jetzt Enter...")
 
 
-def show_layout(professor):
+def show_layout(professor, game_time):
     print("=" * 50)
     print("              PROFESSOR PROTOTYPE")
     print("=" * 50)
     print()
     print("ORT: Unbekannt")
+    print(f"ZEIT: {game_time.display()}")
     print("ZUSTAND: erwacht | durstig | nackt | ohne Schutz | ohne Werkzeug")
     print()
     print(f"NAME: {professor.name}")
@@ -69,8 +73,19 @@ def show_layout(professor):
     print("[0] Spiel beenden")
     print()
 
+def show_status(professor):
+    print("\n" + "-" * 50)
+    print("STATUS")
+    print("-" * 50)
+    print(f"Name: {professor.name}")
+    print(f"Gesundheit: {professor.life_percent()}%")
+    print(f"Wasserhaushalt: {professor.thirst_percent()}%")
+    print(f"Sättigung: {professor.hunger_percent()}%")
+    print(f"Kraft/Ausdauer: {professor.strength_stamina_display()}")
+    print(f"IQ: {professor.iq}")
+    print("-" * 50)
 
-def handle_choice(choice):
+def handle_choice(choice, professor):
     if choice == "1":
         print("\nDu untersuchst vorsichtig die Umgebung.")
     elif choice == "2":
@@ -82,7 +97,7 @@ def handle_choice(choice):
     elif choice == "5":
         print("\nBaumenü ist noch nicht implementiert.")
     elif choice == "6":
-        print("\nStatus: durstig, nackt, ohne Schutz, ohne Werkzeug.")
+        show_status(professor)
     elif choice == "0":
         print("\nSpiel beendet.")
     else:
@@ -96,18 +111,31 @@ def main():
         "Gib deinen Namen hier ein: "
     )
     professor = Character(name=player_name)
+    game_time = GameTime()
     
     running = True
 
     while running:
-        show_layout(professor)
+        game_time.update()
+
+        if game_time.just_entered_night():
+            print("\nEs wird Nacht.")
+            print("Ohne Licht bist du bis zum Morgen handlungsunfähig.")
+
+            skip = input("Nacht überspringen? [j/n]: ")
+
+            if skip.lower() == "j":
+                game_time.skip_night()
+
+        show_layout(professor, game_time)
+
         choice = input("Eingabe: ")
 
         if choice == "0":
-            handle_choice(choice)
+            handle_choice(choice, professor)
             running = False
         else:
-            handle_choice(choice)
+            handle_choice(choice, professor)
             input("\nDrücke Enter, um fortzufahren...")
 
 
