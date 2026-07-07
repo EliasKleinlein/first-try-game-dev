@@ -1,4 +1,5 @@
 import time
+from character import Character
 
 
 def typewriter_text(text, delay=0.03):
@@ -9,6 +10,11 @@ def typewriter_text(text, delay=0.03):
 
 
 def show_intro():
+    skip = input("Intro ansehen? [Enter = ja / s = überspringen]: ")
+
+    if skip.lower() == "s":
+        return
+
     intro_text = [
         "Vor etwa 3700 Jahren ereignete sich ein unbekanntes Phänomen.",
         "Innerhalb kürzester Zeit wurde die gesamte Menschheit versteinert.",
@@ -30,13 +36,20 @@ def show_intro():
     input("\nJunger Professor, bist du der Aufgabe gewachsen? Dann drücke jetzt Enter...")
 
 
-def show_layout():
+def show_layout(professor):
     print("=" * 50)
     print("              PROFESSOR PROTOTYPE")
     print("=" * 50)
     print()
     print("ORT: Unbekannt")
     print("ZUSTAND: erwacht | durstig | nackt | ohne Schutz | ohne Werkzeug")
+    print()
+    print(f"NAME: {professor.name}")
+    print(f"LEBEN: {professor.life_percent()}%")
+    print(f"DURST: {professor.thirst_percent()}%")
+    print(f"HUNGER: {professor.hunger_percent()}%")
+    print(f"KRAFT/AUSDAUER: {professor.strength_stamina_display()}")
+    print(f"IQ: {professor.iq}")
     print()
     print("-" * 50)
     print("GEDANKEN")
@@ -78,11 +91,16 @@ def handle_choice(choice):
 
 def main():
     show_intro()
-
+    player_name = input(
+        "\nJunger Professor, wie ist dein Name?\n"
+        "Gib deinen Namen hier ein: "
+    )
+    professor = Character(name=player_name)
+    
     running = True
 
     while running:
-        show_layout()
+        show_layout(professor)
         choice = input("Eingabe: ")
 
         if choice == "0":
@@ -90,7 +108,7 @@ def main():
             running = False
         else:
             handle_choice(choice)
-            input("\nJunger Professor, bist du der Aufgabe gewachsen? Dann drücke jetzt Enter...")
+            input("\nDrücke Enter, um fortzufahren...")
 
 
 main()
