@@ -1,4 +1,4 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 
 
 @dataclass
@@ -16,6 +16,9 @@ class Character:
 
     thirst: int = 100
     hunger: int = 100
+    
+    inventory: list[str] = field(default_factory=list)
+    discovered_materials: set[str] = field(default_factory=set)
 
     def life_percent(self):
         return int((self.life / self.max_life) * 100)
@@ -28,6 +31,15 @@ class Character:
 
     def strength_stamina_display(self):
         return f"{self.strength}/{self.stamina}"
+    
+    def add_material(self, material_name):
+        self.inventory.append(material_name)
+        self.discovered_materials.add(material_name)
+    
+    def iq_display(self):
+        if self.name.lower() == "professor":
+            return "Legendär"
+        return str(self.iq)
         
     def reset_after_game_over(self):
         self.life = self.max_life
