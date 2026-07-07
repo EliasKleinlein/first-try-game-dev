@@ -28,3 +28,6 @@ class Character:
 
     def strength_stamina_display(self):
         return f"{self.strength}/{self.stamina}"
+        
+    def reset_after_game_over(self):
+        self.life = self.max_life

@@ -1,4 +1,5 @@
 import time
+import random
 from character import Character
 from game_time import GameTime
 
@@ -106,13 +107,15 @@ def handle_choice(choice, professor):
 
 def main():
     show_intro()
+
     player_name = input(
         "\nJunger Professor, wie ist dein Name?\n"
         "Gib deinen Namen hier ein: "
     )
+
     professor = Character(name=player_name)
     game_time = GameTime()
-    
+
     running = True
 
     while running:
@@ -121,10 +124,29 @@ def main():
         if game_time.just_entered_night():
             print("\nEs wird Nacht.")
             print("Ohne Licht bist du bis zum Morgen handlungsunfähig.")
+            print("Wenn du trotzdem draußen bleibst, riskierst du, von einem wilden Tier gefressen zu werden.")
 
-            skip = input("Nacht überspringen? [j/n]: ")
+            skip = input("Nacht überspringen? [j = schlafen / n = draußen bleiben]: ")
 
             if skip.lower() == "j":
+                game_time.skip_night()
+            else:
+                predator = random.choice(["Löwe", "Tiger", "Wolf", "Bär", "Raubtier"])
+
+                print("\nDu bleibst trotz völliger Dunkelheit draußen.")
+                print("Etwas bewegt sich zwischen den Bäumen...")
+                print(f"Ein {predator} greift dich an.")
+                print("Ohne Licht, Schutz oder Orientierung hast du keine Chance.")
+
+                print("\n" + "=" * 50)
+                print("                    GAME OVER")
+                print("=" * 50)
+                print("Du wurdest in der Nacht von einem wilden Tier getötet.")
+                print("=" * 50)
+
+                input("\nDrücke Enter, um am nächsten Morgen neu zu erwachen...")
+
+                professor.reset_after_game_over()
                 game_time.skip_night()
 
         show_layout(professor, game_time)
