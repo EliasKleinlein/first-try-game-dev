@@ -116,7 +116,7 @@ def choose_direction(current_location):
     for index, direction in enumerate(directions, start=1):
         print(f"[{index}] {direction}")
 
-    print("[0] Zurück")
+    print("[0] Bleiben")
 
     choice = input("Eingabe: ")
 
@@ -135,6 +135,50 @@ def choose_direction(current_location):
 
     selected_direction = directions[choice_index]
     return current_location.exits[selected_direction]
+
+def collect_material(professor, current_location):
+    if not current_location.visible_materials:
+        print("\nHier ist aktuell kein brauchbares Material sichtbar.")
+        return
+
+    materials = current_location.visible_materials
+
+    print("\nWelches Material möchtest du aufnehmen?")
+
+    for index, material in enumerate(materials, start=1):
+        print(f"[{index}] {material}")
+
+    print("[a] Alles nehmen")
+    print("[0] Zurück")
+
+    choice = input("Eingabe: ")
+
+    if choice == "0":
+        return
+    
+    if choice.lower() == "a":
+        for material in materials:
+            professor.add_material(material)
+
+        print("\nAlle sichtbaren Materialien wurden aufgenommen.")
+        print("Alle aufgenommenen Materialien wurden als entdeckt markiert.")
+        return
+
+    if not choice.isdigit():
+        print("\nUngültige Eingabe.")
+        return
+
+    choice_index = int(choice) - 1
+
+    if choice_index < 0 or choice_index >= len(materials):
+        print("\nUngültige Eingabe.")
+        return
+
+    selected_material = materials[choice_index]
+    professor.add_material(selected_material)
+
+    print(f"\n{selected_material} wurde aufgenommen.")
+    print(f"{selected_material} wurde als entdeckt markiert.")
 
 def show_status(professor):
     print("\n" + "-" * 50)
@@ -157,9 +201,14 @@ def handle_choice(choice, professor, current_location, current_location_id):
         if new_location_id is not None:
             current_location_id = new_location_id
     elif choice == "2":
-        print("\nDu suchst nach brauchbaren Materialien.")
+        collect_material(professor, current_location)
     elif choice == "3":
-        print("\nInventar ist noch leer.")
+        if not professor.inventory:
+            print("\nInventar ist leer.")
+        else:
+            print("\nInventar:")
+            for material in professor.inventory:
+                print(f"- {material}")
     elif choice == "4":
         print("\nForschungsmenü ist noch nicht implementiert.")
     elif choice == "5":
