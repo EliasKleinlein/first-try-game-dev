@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 from enum import Enum
+import random
 
 
 class Rarity(Enum):
@@ -64,6 +65,12 @@ STARTING_MATERIALS = [
         known_by_professor=True,
         hidden_properties=["trockenbar", "brennbar", "isolierend"],
     ),
+        Material(
+        name="Großes Palmenblatt",
+        rarity=Rarity.COMMON,
+        known_by_professor=True,
+        hidden_properties=["wasserabweisend", "flexibel", "großflächig", "faltbar"],
+    ),
     Material(
         name="Bambusreste",
         rarity=Rarity.PRIMITIVE,
@@ -77,3 +84,31 @@ STARTING_MATERIALS = [
         hidden_properties=["hohl", "stabil", "leicht", "flexibel"],
     ),
 ]
+STARTING_FIND_AMOUNTS = {
+    "Laub": 10,
+    "Großes Palmenblatt": 6,
+    "Stock": 8,
+    "Stein": 5,
+    "Harter Stein": 5,
+    "Splitternder Stein": 5,
+    "Weicher Stein": 5,
+    "Weichholz": 6,
+    "Hartholz": 5,
+    "Bambusreste": 6,
+    "Bambusstange": 3,
+}
+
+
+def get_random_find_amount(material_name):
+    base_amount = STARTING_FIND_AMOUNTS.get(material_name, 1)
+    variation = random.randint(-2, 2)
+
+    amount = base_amount + variation
+
+    if amount < 1:
+        amount = 1
+
+    if amount > 10:
+        amount = 10
+
+    return amount
