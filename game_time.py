@@ -4,8 +4,8 @@ import time
 class GameTime:
     def __init__(self):
         self.day = 1
-        self.hour = 9
-        self.minute = 33
+        self.hour = 21
+        self.minute = 50
 
         self.last_update = time.monotonic()
         self.was_night = False
