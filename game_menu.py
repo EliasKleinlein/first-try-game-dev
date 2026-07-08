@@ -3,6 +3,7 @@ import random
 from character import Character
 from game_time import GameTime
 from locations import LOCATIONS
+from materials import get_random_find_amount
 
 
 
@@ -157,11 +158,14 @@ def collect_material(professor, current_location):
         return
     
     if choice.lower() == "a":
-        for material in materials:
-            professor.add_material(material)
+        print()
 
-        print("\nAlle sichtbaren Materialien wurden aufgenommen.")
-        print("Alle aufgenommenen Materialien wurden als entdeckt markiert.")
+        for material in materials:
+            amount = get_random_find_amount(material)
+            professor.add_material(material, amount)
+            print(f"{material} aufgenommen: {amount}x")
+
+        print("\nAlle aufgenommenen Materialien wurden als entdeckt markiert.")
         return
 
     if not choice.isdigit():
@@ -175,9 +179,10 @@ def collect_material(professor, current_location):
         return
 
     selected_material = materials[choice_index]
-    professor.add_material(selected_material)
+    amount = get_random_find_amount(selected_material)
+    professor.add_material(selected_material, amount)
 
-    print(f"\n{selected_material} wurde aufgenommen.")
+    print(f"\n{selected_material} wurde aufgenommen: {amount}x")
     print(f"{selected_material} wurde als entdeckt markiert.")
 
 def show_status(professor):
@@ -207,8 +212,9 @@ def handle_choice(choice, professor, current_location, current_location_id):
             print("\nInventar ist leer.")
         else:
             print("\nInventar:")
-            for material in professor.inventory:
-                print(f"- {material}")
+            for material, stacks in professor.inventory.items():
+                for stack in stacks:
+                    print(f"- {material}: {stack}x")
     elif choice == "4":
         print("\nForschungsmenü ist noch nicht implementiert.")
     elif choice == "5":
