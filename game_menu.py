@@ -3,7 +3,7 @@ import random
 from character import Character
 from game_time import GameTime
 from locations import LOCATIONS
-from materials import get_random_find_amount
+from materials import get_random_find_amount, material_can_be_found
 
 
 
@@ -46,15 +46,11 @@ def show_layout(professor, game_time, current_location):
     print("              PROFESSOR PROTOTYPE")
     print("=" * 50)
     print()
-    print(f"ORT: {current_location.name}")
-    print(current_location.description)
-    print(f"ZEIT: {game_time.display()}")
-    print("ZUSTAND: erwacht | durstig | nackt | ohne Schutz | ohne Werkzeug")
-    print()
     print(f"NAME: {professor.name}")
+    print(f"ZEIT: {game_time.display()}")
     print(f"LEBEN: {professor.life_percent()}%")
-    print(f"DURST: {professor.thirst_percent()}%")
-    print(f"HUNGER: {professor.hunger_percent()}%")
+    print(f"WASSERHAUSHALT: {professor.thirst_percent()}%")
+    print(f"SÄTTIGUNG: {professor.hunger_percent()}%")
     print(f"KRAFT/AUSDAUER: {professor.strength_stamina_display()}")
     print(f"IQ: {professor.iq_display()}")
     print()
@@ -74,6 +70,12 @@ def show_layout(professor, game_time, current_location):
     print("[5] Bauen / Herstellen")
     print("[6] Status ansehen")
     print("[0] Spiel beenden")
+    print()
+    print("-" * 50)
+    print("AKTUELLER ORT")
+    print("-" * 50)
+    print(f"ORT: {current_location.name}")
+    print(current_location.description)
     print()
 
 def examine_environment(current_location):
@@ -143,11 +145,24 @@ def collect_material(professor, current_location):
         return
 
     materials = current_location.visible_materials
+    
+    found_materials = []
+
+    for material in materials:
+        if material_can_be_found(material):
+            amount = get_random_find_amount(material)
+            found_materials.append((material, amount))
+
+    if not found_materials:
+        print("\nDu suchst die Umgebung ab, findest aber nichts Brauchbares.")
+        return
 
     print("\nWelches Material möchtest du aufnehmen?")
 
-    for index, material in enumerate(materials, start=1):
-        print(f"[{index}] {material}")
+    for index, material_data in enumerate(found_materials, start=1):
+        material_name = material_data[0]
+        amount = material_data[1]
+        print(f"[{index}] {material_name}: {amount}x")
 
     print("[a] Alles nehmen")
     print("[0] Zurück")
@@ -160,10 +175,9 @@ def collect_material(professor, current_location):
     if choice.lower() == "a":
         print()
 
-        for material in materials:
-            amount = get_random_find_amount(material)
-            professor.add_material(material, amount)
-            print(f"{material} aufgenommen: {amount}x")
+        for material_name, amount in found_materials:
+            professor.add_material(material_name, amount)
+            print(f"{material_name} aufgenommen: {amount}x")
 
         print("\nAlle aufgenommenen Materialien wurden als entdeckt markiert.")
         return
@@ -174,16 +188,16 @@ def collect_material(professor, current_location):
 
     choice_index = int(choice) - 1
 
-    if choice_index < 0 or choice_index >= len(materials):
+    if choice_index < 0 or choice_index >= len(found_materials):
         print("\nUngültige Eingabe.")
         return
 
-    selected_material = materials[choice_index]
-    amount = get_random_find_amount(selected_material)
+    selected_material, amount = found_materials[choice_index]
     professor.add_material(selected_material, amount)
 
     print(f"\n{selected_material} wurde aufgenommen: {amount}x")
     print(f"{selected_material} wurde als entdeckt markiert.")
+    return
 
 def show_status(professor):
     print("\n" + "-" * 50)

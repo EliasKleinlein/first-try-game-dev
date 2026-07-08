@@ -10,6 +10,15 @@ class Rarity(Enum):
     RARE = "selten"
     EPIC = "episch"
     LEGENDARY = "legendär"
+    
+RARITY_FIND_CHANCES = {
+    Rarity.PRIMITIVE: 80,
+    Rarity.COMMON: 60,
+    Rarity.UNCOMMON: 35,
+    Rarity.RARE: 15,
+    Rarity.EPIC: 7,
+    Rarity.LEGENDARY: 3,
+}
 
 
 @dataclass
@@ -98,6 +107,14 @@ STARTING_FIND_AMOUNTS = {
     "Bambusstange": 3,
 }
 
+def material_can_be_found(material_name):
+    for material in STARTING_MATERIALS:
+        if material.name == material_name:
+            chance = RARITY_FIND_CHANCES[material.rarity]
+            roll = random.randint(1, 100)
+            return roll <= chance
+
+    return False
 
 def get_random_find_amount(material_name):
     base_amount = STARTING_FIND_AMOUNTS.get(material_name, 1)

@@ -34,7 +34,7 @@ LOCATIONS = {
         ),
         smells=[],
         sounds=["Waldrauschen", "Vögel"],
-        visible_materials=["Stock", "Stein", "Laub"],
+        visible_materials=["Stock", "Laub", "Großes Palmenblatt", "Bambusreste"],
         exits={
             "zurück zur Höhle": "cave",
             "links zum Bach": "brook",
@@ -50,7 +50,7 @@ LOCATIONS = {
         ),
         smells=[],
         sounds=["fließendes Wasser", "Waldrauschen"],
-        visible_materials=["Stein", "Laub"],
+        visible_materials=["Stock", "Laub", "Großes Palmenblatt", "Bambusreste"],
         exits={
             "zurück zur Lichtung": "cave_clearing",
         },
@@ -64,7 +64,7 @@ LOCATIONS = {
         ),
         smells=["salzige Luft"],
         sounds=["fernes Rauschen"],
-        visible_materials=["Stein", "Stock"],
+        visible_materials=["Stock", "Laub", "Großes Palmenblatt", "Bambusreste"],
         exits={
             "zurück zur Lichtung": "cave_clearing",
         },
@@ -78,7 +78,7 @@ LOCATIONS = {
         ),
         smells=["feuchte Erde"],
         sounds=["Vögel", "Waldrauschen"],
-        visible_materials=["Stock", "Laub", "Bambusreste"],
+        visible_materials=["Stock", "Laub", "Großes Palmenblatt", "Bambusreste"],
         exits={
             "zurück zur Lichtung": "cave_clearing",
         },
