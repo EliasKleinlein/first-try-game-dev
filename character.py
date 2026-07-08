@@ -66,3 +66,4 @@ class Character:
         
     def reset_after_game_over(self):
         self.life = self.max_life
+        self.inventory.clear()
