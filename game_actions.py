@@ -1,4 +1,4 @@
-from materials import get_random_find_amount, material_can_be_found
+from Materials import get_random_find_amount, material_can_be_found
 from inventory_ui import show_inventory
 from navigation import get_available_directions, get_location_id_for_direction
 from terminal_ui import (

@@ -1,34 +1,5 @@
-from dataclasses import dataclass, field
-from enum import Enum
-import random
-
-
-class Rarity(Enum):
-    PRIMITIVE = "primitiv"
-    COMMON = "gewöhnlich"
-    UNCOMMON = "ungewöhnlich"
-    RARE = "selten"
-    EPIC = "episch"
-    LEGENDARY = "legendär"
-    
-RARITY_FIND_CHANCES = {
-    Rarity.PRIMITIVE: 80,
-    Rarity.COMMON: 60,
-    Rarity.UNCOMMON: 35,
-    Rarity.RARE: 15,
-    Rarity.EPIC: 7,
-    Rarity.LEGENDARY: 3,
-}
-
-
-@dataclass
-class Material:
-    name: str
-    rarity: Rarity
-    known_by_professor: bool = False
-    discovered: bool = False
-    properties: list[str] = field(default_factory=list)
-    hidden_properties: list[str] = field(default_factory=list)
+from Materials.material import Material
+from Materials.rarity import Rarity
 
 
 STARTING_MATERIALS = [
@@ -38,7 +9,7 @@ STARTING_MATERIALS = [
         known_by_professor=True,
         hidden_properties=["leicht", "brennbar", "bearbeitbar"],
     ),
-        Material(
+    Material(
         name="Weichholz",
         rarity=Rarity.PRIMITIVE,
         known_by_professor=True,
@@ -74,7 +45,7 @@ STARTING_MATERIALS = [
         known_by_professor=True,
         hidden_properties=["trockenbar", "brennbar", "isolierend"],
     ),
-        Material(
+    Material(
         name="Großes Palmenblatt",
         rarity=Rarity.COMMON,
         known_by_professor=True,
@@ -93,39 +64,3 @@ STARTING_MATERIALS = [
         hidden_properties=["hohl", "stabil", "leicht", "flexibel"],
     ),
 ]
-STARTING_FIND_AMOUNTS = {
-    "Laub": 10,
-    "Großes Palmenblatt": 6,
-    "Stock": 8,
-    "Stein": 5,
-    "Harter Stein": 5,
-    "Splitternder Stein": 5,
-    "Weicher Stein": 5,
-    "Weichholz": 6,
-    "Hartholz": 5,
-    "Bambusreste": 6,
-    "Bambusstange": 3,
-}
-
-def material_can_be_found(material_name):
-    for material in STARTING_MATERIALS:
-        if material.name == material_name:
-            chance = RARITY_FIND_CHANCES[material.rarity]
-            roll = random.randint(1, 100)
-            return roll <= chance
-
-    return False
-
-def get_random_find_amount(material_name):
-    base_amount = STARTING_FIND_AMOUNTS.get(material_name, 1)
-    variation = random.randint(-2, 2)
-
-    amount = base_amount + variation
-
-    if amount < 1:
-        amount = 1
-
-    if amount > 10:
-        amount = 10
-
-    return amount
