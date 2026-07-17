@@ -179,7 +179,63 @@ def ask_direction_choice(directions):
         return None
 
     if not choice.isdigit():
-        print("\nUngültige Eingabe.")
-        return None
+        return -1
 
     return int(choice) - 1
+
+def show_no_visible_materials():
+    print("\nHier ist aktuell kein brauchbares Material sichtbar.")
+
+
+def show_no_materials_found():
+    print("\nDu suchst die Umgebung ab, findest aber nichts Brauchbares.")
+
+
+def ask_material_choice(found_materials):
+    print("\nWelches Material möchtest du aufnehmen?")
+
+    for index, material_data in enumerate(found_materials, start=1):
+        material_name = material_data[0]
+        amount = material_data[1]
+        print(f"[{index}] {material_name}: {amount}x")
+
+    print("[a] Alles nehmen")
+    print("[0] Zurück")
+
+    return input("Eingabe: ")
+
+
+def show_materials_collected(found_materials):
+    print()
+
+    for material_name, amount in found_materials:
+        print(f"{material_name} aufgenommen: {amount}x")
+
+    print("\nAlle aufgenommenen Materialien wurden als entdeckt markiert.")
+
+
+def show_material_collected(material_name, amount):
+    print(f"\n{material_name} wurde aufgenommen: {amount}x")
+    print(f"{material_name} wurde als entdeckt markiert.")
+    
+def show_material_choice_hint():
+    print("Gültige Eingaben: Zahl des Materials, a = alles nehmen, 0 = zurück.")
+    
+def show_direction_choice_hint():
+    print("Gültige Eingaben: Zahl der Richtung, 0 = bleiben.")
+
+def show_research_menu():
+    print("\n" + "-" * 50)
+    print("FORSCHUNG / HYPOTHESEN")
+    print("-" * 50)
+    print("[1] Periodensystem")
+    print("[2] Entdeckte Materialien")
+    print("[3] Forschen")
+    print("[4] Experimente")
+    print("[5] Hypothesen")
+    print("[0] Zurück")
+    print()
+
+
+def ask_research_choice():
+    return input("Eingabe: ")
